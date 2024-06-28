@@ -1,0 +1,48 @@
+﻿@model List<Application>
+
+<h1>Applications for Review</h1>
+
+@if (Model.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>JobSeeker ID</th>
+                <th>Job Title</th>
+                <th>Submission Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@application.JobSeekerId</td>
+                    <td>@application.Job.Title</td>
+                    <td>@application.SubmissionDate.ToString("dd/MM/yyyy")</td>
+                    <td>@application.Status</td>
+                    <td>
+                        <!-- Chấp Thuận -->
+                        <form asp-action="Approve" asp-route-id="@application.Id" method="post">
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+
+                        <!-- Không Chấp Thuận -->
+                        <form asp-action="Reject" asp-route-id="@application.Id" method="post">
+                            <button type="submit" class="btn btn-warning">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No applications found.</p>
+}
+
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to My Applications</a>
+</div>

@@ -1,0 +1,76 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Register confirmation";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.DisplayConfirmAccountLink)
+{
+    <p>
+        This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
+        Normally this would be emailed: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>
+    </p>
+}
+else
+{
+    <p>
+        Please check your email to confirm your account.
+    </p>
+}
+
+<div>
+    <form id="sendOtpForm">
+        <input type="text" id="phoneNumber" placeholder="Enter your phone number">
+        <button type="button" onclick="sendOtp()">Send OTP</button>
+    </form>
+
+    <form id="verifyOtpForm">
+        <input type="text" id="otp" placeholder="Enter OTP">
+        <button type="button" onclick="verifyOtp()">Verify OTP</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        async function sendOtp() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            if (!phoneNumber) {
+                alert('Please enter a phone number.');
+                return;
+            }
+
+            const response = await fetch('/Otp/SendOtp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ phoneNumber: phoneNumber })
+            });
+
+            const data = await response.text();
+            alert(data);
+        }
+
+        async function verifyOtp() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const otp = document.getElementById('otp').value;
+            if (!phoneNumber || !otp) {
+                alert('Please enter both phone number and OTP.');
+                return;
+            }
+
+            const response = await fetch('/Otp/VerifyOtp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ phoneNumber: phoneNumber, otp: otp })
+            });
+
+            const data = await response.text();
+            alert(data);
+        }
+    </script>
+}

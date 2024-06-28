@@ -1,0 +1,46 @@
+﻿@model IEnumerable<JobWebApplicationvip.Models.Application>
+
+@{
+    ViewData["Title"] = "My Applications";
+}
+
+<h1>My Applications</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>JobSeeker ID</th>
+            <th>Job Title</th>
+            <th>Submission Date</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobSeeker.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Job.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubmissionDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @if (item.Status == JobWebApplicationvip.Models.ApplicationStatus.Pending)
+                    {
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="post">
+                            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this application?');" />
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
